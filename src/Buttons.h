@@ -2,12 +2,9 @@
 #define __BUTTONS_H
 
 //#define ONLY_COMPLEX_STATES // Only CLICK, LONGCLICK and DBLCLICK states processing
-//#define ONE_BUTTON
 
-#ifndef ONE_BUTTON
-#include "List.h"
-#endif
 #include "Events.h"
+#include "List.h"
 
 struct __packed _button_t {
 #ifdef ESP32
@@ -29,7 +26,6 @@ enum buttonstate_t : uint8_t { BTN_RELEASED, BTN_PRESSED, BTN_CLICK, BTN_LONGCLI
 enum btneventid_t : uint8_t { EVT_BTNRELEASED = EVT_BTNBASE + BTN_RELEASED, EVT_BTNPRESSED = EVT_BTNBASE + BTN_PRESSED,
   EVT_BTNCLICK = EVT_BTNBASE + BTN_CLICK, EVT_BTNLONGCLICK = EVT_BTNBASE + BTN_LONGCLICK, EVT_BTNDBLCLICK = EVT_BTNBASE + BTN_DBLCLICK };
 
-#ifdef ONE_BUTTON
 class Button {
 public:
   Button(uint8_t pin, bool level, const EventQueue *events = NULL);
@@ -49,7 +45,6 @@ protected:
   uint32_t _isrtime;
   EventQueue *_events;
 };
-#else
 
 #ifdef ESP32
 #define MAX_BUTTONS 24
@@ -79,6 +74,5 @@ protected:
   uint32_t _isrtime;
   EventQueue *_events;
 };
-#endif
 
 #endif
