@@ -3,28 +3,24 @@
 #include "Events.h"
 #include "Buttons.h"
 
-#ifdef ONE_LED
-const uint8_t LED_PIN = 2;
-#else
-const uint8_t LED_PINS[4] PROGMEM = { 2, 14, 12, 13 };
-#endif
-const bool LED_LEVEL = LOW;
-#ifdef ONE_BUTTON
-const uint8_t BTN_PIN = 0;
-#else
-const uint8_t BTN_PINS[4] PROGMEM = { 3, 5, 4, 0 };
-#endif
-const bool BTN_LEVEL = LOW;
+#define ONE_LED
 
 #ifdef ONE_LED
-Led *led;
+const uint8_t LED_PIN = 2;
+const uint8_t BTN_PIN = 0;
 #else
-Leds *leds;
+const uint8_t LED_PINS[] PROGMEM = { 2, 14, 12, 13 };
+const uint8_t BTN_PINS[] PROGMEM = { 3, 5, 4, 0 };
 #endif
+const bool LED_LEVEL = LOW;
+const bool BTN_LEVEL = LOW;
+
 EventQueue *events;
-#ifdef ONE_BUTTON
+#ifdef ONE_LED
+Led *led;
 Button *btn;
 #else
+Leds *leds;
 Buttons *btns;
 #endif
 
@@ -36,20 +32,17 @@ void setup() {
   Serial.println();
 #endif
 
+  events = new EventQueue();
 #ifdef ONE_LED
   led = new Led(LED_PIN, LED_LEVEL);
-#else
-  leds = new Leds();
-  for (uint8_t i = 0; i < 4; ++i) {
-    leds->add(pgm_read_byte(&LED_PINS[i]), LED_LEVEL);
-  }
-#endif
-  events = new EventQueue();
-#ifdef ONE_BUTTON
   btn = new Button(BTN_PIN, BTN_LEVEL, events);
 #else
+  leds = new Leds();
+  for (uint8_t i = 0; i < sizeof(LED_PINS) / sizeof(LED_PINS[0]); ++i) {
+    leds->add(pgm_read_byte(&LED_PINS[i]), LED_LEVEL);
+  }
   btns = new Buttons(events);
-  for (uint8_t i = 0; i < 4; ++i) {
+  for (uint8_t i = 0; i < sizeof(BTN_PINS) / sizeof(BTN_PINS[0]); ++i) {
     btns->add(pgm_read_byte(&BTN_PINS[i]), BTN_LEVEL);
   }
 #endif
