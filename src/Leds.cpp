@@ -4,7 +4,6 @@
 #endif
 #include "Leds.h"
 
-#ifdef ONE_LED
 Led::Led(uint8_t pin, bool level) {
 #ifdef ESP32
   ledcSetup(0, 4096, 10);
@@ -144,7 +143,6 @@ inline void Led::off() {
 inline void Led::on() {
   digitalWrite(_item.pin, _item.level);
 }
-#else
 
 uint8_t Leds::add(uint8_t pin, bool level, ledmode_t mode) {
 #ifdef ESP32
@@ -357,4 +355,3 @@ void Leds::off(uint8_t index) {
     digitalWrite(_items[index].pin, ! _items[index].level);
   }
 }
-#endif
