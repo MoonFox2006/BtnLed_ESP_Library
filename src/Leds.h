@@ -1,12 +1,7 @@
 #ifndef __LEDS_H
 #define __LEDS_H
 
-//#define ONE_LED
-
-#include <inttypes.h>
-#ifndef ONE_LED
-#include <List.h>
-#endif
+#include "List.h"
 
 enum ledmode_t : uint8_t { LED_OFF, LED_ON, LED_1HZ, LED_2HZ, LED_4HZ, LED_FADEIN, LED_FADEOUT, LED_FADEINOUT };
 
@@ -20,7 +15,6 @@ struct __packed _led_t {
   ledmode_t mode : 3;
 };
 
-#ifdef ONE_LED
 class Led {
 public:
   Led(uint8_t pin, bool level = false);
@@ -47,7 +41,6 @@ protected:
 
   _led_t _item;
 };
-#else
 
 #ifdef ESP32
 #define MAX_LEDS 16
@@ -73,6 +66,5 @@ protected:
   void on(uint8_t index);
   void off(uint8_t index);
 };
-#endif
 
 #endif
