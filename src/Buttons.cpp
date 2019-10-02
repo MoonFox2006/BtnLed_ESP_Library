@@ -3,7 +3,6 @@
 #include <FunctionalInterrupt.h>
 #include "Buttons.h"
 
-#ifdef ONE_BUTTON
 Button::Button(uint8_t pin, bool level, const EventQueue *events) : _isrtime(0), _events((EventQueue*)events) {
   _item.pin = pin;
   _item.level = level;
@@ -81,7 +80,6 @@ void Button::onChange(buttonstate_t state) {
     _events->put(&e, true);
   }
 }
-#else
 
 uint8_t Buttons::add(uint8_t pin, bool level) {
 #ifdef ESP32
@@ -195,4 +193,3 @@ void Buttons::onChange(buttonstate_t state, uint8_t button) {
     _events->put(&e, true);
   }
 }
-#endif
