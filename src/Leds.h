@@ -3,7 +3,7 @@
 
 #include "List.h"
 
-enum ledmode_t : uint8_t { LED_OFF, LED_ON, LED_1HZ, LED_2HZ, LED_4HZ, LED_FADEIN, LED_FADEOUT, LED_FADEINOUT };
+enum ledmode_t { LED_OFF, LED_ON, LED_1HZ, LED_2HZ, LED_4HZ, LED_FADEIN, LED_FADEOUT, LED_FADEINOUT };
 
 struct __packed _led_t {
 #ifdef ESP32
