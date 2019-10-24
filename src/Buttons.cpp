@@ -3,15 +3,16 @@
 #include <FunctionalInterrupt.h>
 #include "Buttons.h"
 
-Button::Button(uint8_t pin, bool level, const EventQueue *events) : _isrtime(0), _events((EventQueue*)events) {
+Button::Button(uint8_t pin, bool level, const EventQueue *events, bool paused) : _isrtime(0), _events((EventQueue*)events) {
   _item.pin = pin;
   _item.level = level;
-  _item.paused = false;
+  _item.paused = paused;
   _item.pressed = false;
   _item.dblclickable = false;
   _item.duration = 0;
   pinMode(pin, level ? INPUT : INPUT_PULLUP);
-  attachInterrupt(pin, [this]() { this->_isr(this); }, CHANGE);
+  if (! paused)
+    attachInterrupt(pin, [this]() { this->_isr(this); }, CHANGE);
 }
 
 void Button::pause() {
@@ -81,7 +82,7 @@ void Button::onChange(buttonstate_t state) {
   }
 }
 
-uint8_t Buttons::add(uint8_t pin, bool level) {
+uint8_t Buttons::add(uint8_t pin, bool level, bool paused) {
 #ifdef ESP32
   if (pin > 39)
 #else
@@ -94,14 +95,15 @@ uint8_t Buttons::add(uint8_t pin, bool level) {
 
   b.pin = pin;
   b.level = level;
-  b.paused = false;
+  b.paused = paused;
   b.pressed = false;
   b.dblclickable = false;
   b.duration = 0;
   result = List<_button_t, MAX_BUTTONS>::add(b);
   if (result != ERR_INDEX) {
     pinMode(pin, level ? INPUT : INPUT_PULLUP);
-    attachInterrupt(pin, [this]() { this->_isr(this); }, CHANGE);
+    if (! paused)
+      attachInterrupt(pin, [this]() { this->_isr(this); }, CHANGE);
   }
 
   return result;
