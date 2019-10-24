@@ -28,7 +28,7 @@ enum btneventid_t { EVT_BTNRELEASED = EVT_BTNBASE + BTN_RELEASED, EVT_BTNPRESSED
 
 class Button {
 public:
-  Button(uint8_t pin, bool level, const EventQueue *events = NULL);
+  Button(uint8_t pin, bool level, const EventQueue *events = NULL, bool paused = false);
 
   void pause();
   void resume();
@@ -56,7 +56,7 @@ class Buttons : public List<_button_t, MAX_BUTTONS> {
 public:
   Buttons(const EventQueue *events = NULL) : List<_button_t, MAX_BUTTONS>(), _isrtime(0), _events((EventQueue*)events) {}
 
-  uint8_t add(uint8_t pin, bool level);
+  uint8_t add(uint8_t pin, bool level, bool paused = false);
   void pause(uint8_t index);
   void resume(uint8_t index);
 
