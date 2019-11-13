@@ -116,6 +116,15 @@ void Buttons::pause(uint8_t index) {
   }
 }
 
+void Buttons::pause() {
+  if (_items && _count) {
+    for (uint8_t i = 0; i < _count; ++i) {
+      if (! _items[i].paused)
+        detachInterrupt(_items[i].pin);
+    }
+  }
+}
+
 void Buttons::resume(uint8_t index) {
   if (_items && (index < _count)) {
     _items[index].paused = false;
@@ -123,6 +132,19 @@ void Buttons::resume(uint8_t index) {
     _items[index].dblclickable = false;
     _items[index].duration = 0;
     attachInterrupt(_items[index].pin, [this]() { this->_isr(this); }, CHANGE);
+  }
+}
+
+void Buttons::resume() {
+  if (_items && _count) {
+    for (uint8_t i = 0; i < _count; ++i) {
+      if (! _items[i].paused) {
+        _items[i].pressed = false;
+        _items[i].dblclickable = false;
+        _items[i].duration = 0;
+        attachInterrupt(_items[i].pin, [this]() { this->_isr(this); }, CHANGE);
+      }
+    }
   }
 }
 

@@ -58,7 +58,9 @@ public:
 
   uint8_t add(uint8_t pin, bool level, bool paused = false);
   void pause(uint8_t index);
+  void pause();
   void resume(uint8_t index);
+  void resume();
 
 protected:
   static const uint16_t CLICK_TIME = 20; // 20 ms. debounce time
